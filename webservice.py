@@ -1,6 +1,9 @@
-import bottle
-from config import Config
 from multiprocessing import Process
+
+import bottle
+import re
+
+from config import Config
 
 
 @bottle.post('/submit')
@@ -9,13 +12,15 @@ def submit():
     exploit = bottle.request.forms.get('exploit')
     target = bottle.request.forms.get('target')
 
-    flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'status': 'unsubmitted'})
+    # Decide whether to send the matched string or the original flag
+    if re.match(Config.Flag.regex, flag):
+        flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'status': 'unsubmitted'})
 
 
 def run():
     # Find solution, Process uses fork which would fuck up the MongoClient, maybe start script with exec?
-    from backend import flagcollection
     global flagcollection
+    from backend import flagcollection
 
     bottle.run(host=Config.Backend.WebService.ip, port=Config.Backend.WebService.port, quiet=True)
 

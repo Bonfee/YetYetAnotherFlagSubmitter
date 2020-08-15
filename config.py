@@ -31,6 +31,8 @@ class Config:
         port = 1234
         protocol = Protocols.plaintext
         url = "http://%s:%d/" % (ip, port)
+        n_workers = 2
+        flag_limit = 50
 
     exploits_dir = str(pathlib.Path(__file__).parent.absolute()) + '/exploits'
     targets_file = str(pathlib.Path(__file__).parent.absolute()) + '/targets.txt'
