@@ -1,9 +1,16 @@
+from bson.json_util import dumps
+import re
 from multiprocessing import Process
 
 import bottle
-import re
 
 from config import Config
+
+
+@bottle.get('/data')
+def get_data():
+    data = flagcollection.find()
+    return dumps(data)
 
 
 @bottle.post('/submit')
