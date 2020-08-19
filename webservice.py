@@ -1,8 +1,8 @@
 from bson.json_util import dumps
-import re
 from multiprocessing import Process
 
 import bottle
+import re
 
 from config import Config
 
@@ -22,6 +22,8 @@ def submit():
     # Decide whether to send the matched string or the original flag
     if re.match(Config.Flag.regex, flag):
         flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'status': 'unsubmitted'})
+    else:
+        print('Regex fail')  # TO DO
 
 
 def run():

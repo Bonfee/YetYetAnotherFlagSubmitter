@@ -12,6 +12,7 @@ class Protocols:
 class Config:
     class Exploiter:
         PoolSize = 200
+        timeout = 30
 
     class Backend:
         class Mongo:
