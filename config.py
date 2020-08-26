@@ -25,7 +25,7 @@ class Config:
             url_submit = 'http://%s:%d/submit' % (ip, port)
 
     class Flag:
-        regex = r'FLAG{.*}'
+        regex = r'CCIT{.*}'
 
     class Submission:
         ip = "127.0.0.1"

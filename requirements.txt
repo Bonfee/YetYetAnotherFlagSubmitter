@@ -3,3 +3,4 @@ requests
 pexpect
 bottle
 pwntools
+mongo_datatables

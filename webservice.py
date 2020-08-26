@@ -1,11 +1,19 @@
 from bson.json_util import dumps
 from multiprocessing import Process
 
-import bottle
+import bottle, json, random
 import re
 
 from config import Config
+from mongo_datatables import DataTables
+from pymongo import *
+from util import get_exploits
+#Initialize new mongo connection, adapted to Flask standards. As suggested by mongo docs, one connection per child.
+class MongoConnection(object):
 
+    def __init__(self):
+        client = MongoClient(Config.Backend.Mongo.ip, Config.Backend.Mongo.port)
+        self.db = client['submitter_db']
 
 @bottle.get('/data')
 def get_data():
@@ -17,13 +25,16 @@ def get_data():
 def submit():
     flag = bottle.request.forms.get('flag')
     exploit = bottle.request.forms.get('exploit')
+    IP = bottle.request.forms.get('IP')
+    timestamp = bottle.request.forms.get('timestamp')
     target = bottle.request.forms.get('target')
 
     # Decide whether to send the matched string or the original flag
     if re.match(Config.Flag.regex, flag):
-        flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'status': 'unsubmitted'})
+        flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'IP':IP, 'timestamp':timestamp, 'target':target, 'status': 'unsubmitted'})
     else:
         print('Regex fail')  # TO DO
+        return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
 
 
 def run():
@@ -43,3 +54,51 @@ class WebService:
 
 if __name__ == '__main__':
     WebService.start()
+    
+#Bottle routes
+#Home page
+@bottle.route('/')
+def index():
+   
+    return bottle.template('tables.tpl')
+#Serve static files    
+@bottle.route('/vendor/:filename#.*#')
+def send_static(filename):
+    return bottle.static_file(filename, root='./static/vendor')
+
+@bottle.route('/js/:filename#.*#')
+def send_static(filename):
+    return bottle.static_file(filename, root='./static/js')
+
+@bottle.route('/css/:filename#.*#')
+def send_static(filename):
+    return bottle.static_file(filename, root='./static/css')
+#DataTables Ajax handler    
+@bottle.route('/table_ajax/<collection>')
+def api_db(collection):
+    mongo = MongoConnection()
+    request_args = json.loads(bottle.request.query.get("args"))
+    results = DataTables(mongo, collection, request_args).get_rows()
+    return json.dumps(results)
+#Pie Chart Ajax
+@bottle.route('/dispatching_ajax')
+def get_stats(): 
+    failed = flagcollection.find({'status': 'failed'}).count()
+    submitted = flagcollection.find({'status': 'submitted'}).count()
+    unsubmitted = flagcollection.find({'status': 'unsubmitted'}).count()
+    pending = flagcollection.find({'status': 'pending'}).count()
+    return json.dumps({'failed':failed,'submitted':submitted,'pending':pending, 'unsubmitted':unsubmitted})
+#Bar Chart Ajax
+@bottle.route('/barchart_ajax')
+def get_stats(): 
+    exploits = get_exploits()
+    labels = []
+    count = []
+    for exploit in exploits:
+        flagno = flagcollection.find({'exploit': exploit}).count()
+        count.append(flagno);
+        exploit_name = exploit.split('/')
+        exploit_name = exploit_name[-1]
+        labels.append(exploit_name)
+    return json.dumps({'labels':labels,'count':count})
+
