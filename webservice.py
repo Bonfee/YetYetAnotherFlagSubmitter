@@ -13,6 +13,26 @@ def get_data():
     return dumps(data)
 
 
+@bottle.post('/submit_many')
+def submit_many():
+    flags = bottle.request.json.get('flags')
+    exploit = bottle.request.json.get('exploit')
+    target = bottle.request.json.get('target')
+
+    valid_flags = []
+    for f in flags:
+        if re.match(Config.Flag.regex, f):
+            valid_flags.append(f)
+        else:
+            print('Regex fail')  # TO DO
+            print(f)
+            print()
+
+    if len(valid_flags) > 0:
+        flagcollection.insert_many(
+            [{'flag': flag, 'exploit': exploit, 'target': target, 'status': 'unsubmitted'} for flag in valid_flags])
+
+
 @bottle.post('/submit')
 def submit():
     flag = bottle.request.forms.get('flag')
@@ -23,7 +43,7 @@ def submit():
     if re.match(Config.Flag.regex, flag):
         flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'status': 'unsubmitted'})
     else:
-        print('Regex fail')  # TO DO
+        print('Regex fail')  # TO DO Logging module
 
 
 def run():
