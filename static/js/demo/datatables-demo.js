@@ -27,7 +27,7 @@ $(document).ready(function() {
   });
   
   setInterval( function () {
-    table.ajax.reload();
+    table.ajax.reload(null,false);
 }, 10000 );
 });
 
