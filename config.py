@@ -24,10 +24,10 @@ class Config:
             port = 8080
             url_submit = 'http://%s:%d/submit' % (ip, port)
             url_submit_many = 'http://%s:%d/submit_many' % (ip, port)
+
         class Bottle:
             ip = '127.0.0.1'
             port = 8000
-
 
     class Flag:
         regex = r'CCIT{.*}'

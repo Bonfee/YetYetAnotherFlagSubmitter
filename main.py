@@ -5,6 +5,6 @@ import signal
 
 if __name__ == '__main__':
     WebService.start()
-#    Exploiter.start()
+    Exploiter.start()
     Submitter.start()
     signal.pause()
