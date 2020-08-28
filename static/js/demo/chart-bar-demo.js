@@ -143,4 +143,4 @@ xhr.onerror = function (e) {
   console.error(xhr.statusText);
 };
 xhr.send(null); 
-}, 10000)
+}, 2000)
