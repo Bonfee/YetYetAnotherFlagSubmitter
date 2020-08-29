@@ -2,13 +2,13 @@ import requests
 import socket
 import time
 from multiprocessing import Process
-
+from backend import MongoConnection
 from config import *
 
 
 def run():
     global flagcollection
-    from backend import flagcollection
+    flagcollection = MongoConnection().db.flags
 
     while True:
         ids, flags = retrieve()

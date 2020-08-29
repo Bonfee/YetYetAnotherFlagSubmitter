@@ -1,9 +1,9 @@
 import os
 import texttable
 import time
+from backend import MongoConnection
 
-from backend import *
-
+flagcollection = MongoConnection().db.flags
 os.system("clear")
 while True:
     table = texttable.Texttable()
