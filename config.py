@@ -17,7 +17,6 @@ class Config:
         # To specify a custom exploit just add an entry with the exploit file name without the extension
         class CustomTimeouts:
             exploit1 = 10
-            pass
 
     class Backend:
         class Mongo:
