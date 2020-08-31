@@ -14,6 +14,11 @@ class Config:
         PoolSize = 200
         timeout = 30
 
+        # To specify a custom exploit just add an entry with the exploit file name without the extension
+        class CustomTimeouts:
+            exploit1 = 10
+            pass
+
     class Backend:
         class Mongo:
             ip = '127.0.0.1'
