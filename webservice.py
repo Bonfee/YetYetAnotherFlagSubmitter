@@ -29,7 +29,8 @@ def submit_many():
 
     if len(valid_flags) > 0:
         flagcollection.insert_many([{'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
-                                     'status': 'unsubmitted'} for flag in valid_flags])
+                                     'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
+                                    for flag in valid_flags])
 
 
 @bottle.post('/submit')
@@ -42,7 +43,7 @@ def submit():
     # Decide whether to send the matched string or the original flag
     if re.match(Config.Flag.regex, flag):
         flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
-                                   'status': 'unsubmitted'})
+                                   'status': Config.Flag.Status.Manual.unsubmitted.value['text']})
     else:
         print('Regex fail')  # TO DO
         return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
