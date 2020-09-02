@@ -32,3 +32,12 @@ def get_exploit_timeout(exploit):
         return getattr(Config.Exploiter.CustomTimeouts, exploit_name)
     except AttributeError:
         return Config.Exploiter.timeout
+
+
+# Gets the output returned from the gameserver
+# and return the flag's status
+def get_flag_status(output):
+    for r in Config.Flag.Status.Returned:
+        if r.value['match'] in output:
+            return r.value['text']
+    return 'Unknown'

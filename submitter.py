@@ -6,6 +6,7 @@ from backend import MongoConnection
 import logging
 import logging.config
 from config import *
+from util import get_flag_status
 
 
 def run(logger):
@@ -16,13 +17,15 @@ def run(logger):
         ids, flags = retrieve()
         if len(ids) > 0:
             # Update retrieved flags' status
-            flagcollection.update_many({"_id": {"$in": ids}}, {"$set": {'status': 'pending'}})
+            flagcollection.update_many({"_id": {"$in": ids}},
+                                       {"$set": {'status': Config.Flag.Status.Manual.pending.value['text']}})
 
             # Submit
-            submit(flags, logger)
+            status = submit(flags, logger)
 
             # Update submitted flags' status
-            flagcollection.update_many({"_id": {"$in": ids}}, {"$set": {'status': 'submitted'}})
+            for i in range(0, len(ids)):
+                flagcollection.update_one({"_id": ids[i]}, {"$set": {'status': status[i]}})
 
         time.sleep(1)
 
@@ -32,7 +35,8 @@ def retrieve():
 
     # Get all the unsubmitted flags,
     # if we want to have many submitter workers we can tweak the number of flags retrieved
-    for e in flagcollection.find({'status': 'unsubmitted'}).limit(Config.Submission.flag_limit):
+    for e in flagcollection.find({'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
+                                 ).limit(Config.Submission.flag_limit):
         ids.append(e['_id'])
         flags.append(str(e['flag']))
 
@@ -40,6 +44,8 @@ def retrieve():
 
 
 def submit(flags, logger):
+    status = []
+
     if Config.Submission.protocol == Protocols.plaintext:
 
         connected = False
@@ -54,7 +60,9 @@ def submit(flags, logger):
 
         for flag in flags:
             s.send((flag + '\n').encode())
-            # Get response ? ex: flag valid, too old ecc
+            output = s.recv(4096).decode()
+
+            status.append(get_flag_status(output))
 
         s.close()
 
@@ -69,6 +77,8 @@ def submit(flags, logger):
 
     else:
         pass
+
+    return status
 
 
 class Submitter:
