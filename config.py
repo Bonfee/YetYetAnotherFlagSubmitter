@@ -1,4 +1,5 @@
 import pathlib
+from enum import Enum
 
 
 class Protocols:
@@ -44,6 +45,27 @@ class Config:
         url = "http://%s:%d/" % (ip, port)
         n_workers = 2
         flag_limit = 50
+
+        # This class represent the responses of the gameserver when submitting a flag
+        # text -> The string that will be stored in the database and displayed in the frontend
+        # match -> The response of the gameserver when submitting the flag
+        class Response(Enum):
+            valid = {
+                'text': 'Valid',
+                'match': 'valid flag'
+            }
+            too_old = {
+                'text': 'Too old',
+                'match': 'too old flag'
+            }
+            already_submitted = {
+                'text': 'Already submitted',
+                'match': 'flag already submitted'
+            }
+            invalid = {
+                'text': 'Invalid flag',
+                'match': 'flag is invalid'
+            }
 
     exploits_dir = str(pathlib.Path(__file__).parent.absolute()) + '/exploits'
     targets_file = str(pathlib.Path(__file__).parent.absolute()) + '/targets.txt'
