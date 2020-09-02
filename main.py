@@ -7,8 +7,8 @@ import logging
 
 if __name__ == '__main__':
     logging.config.fileConfig(fname='log.conf')
-    logger_exploiter  = logging.getLogger('exploiter')
-    logger_submitter  = logging.getLogger('submitter')
+    logger_exploiter = logging.getLogger('exploiter')
+    logger_submitter = logging.getLogger('submitter')
     logger_webservice = logging.getLogger('webservice')
 
     WebService.start(logger_webservice)

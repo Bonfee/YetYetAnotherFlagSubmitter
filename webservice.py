@@ -1,3 +1,5 @@
+import logging
+import logging.config
 import re
 from multiprocessing import Process
 import bottle
@@ -68,4 +70,3 @@ if __name__ == '__main__':
     logging.config.fileConfig(fname='log.conf')
     logger = logging.getLogger('webservice')
     WebService.start(logger)
-    
