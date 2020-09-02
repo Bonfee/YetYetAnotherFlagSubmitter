@@ -58,9 +58,13 @@ def run():
 class WebService:
 
     @staticmethod
-    def start():
+    def start(logger):
+        logger.info('Starting webservice')
         Process(target=run).start()
 
 
 if __name__ == '__main__':
-    WebService.start()
+    logging.config.fileConfig(fname='log.conf')
+    logger = logging.getLogger('webservice')
+    WebService.start(logger)
+    

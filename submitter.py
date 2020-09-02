@@ -3,10 +3,12 @@ import socket
 import time
 from multiprocessing import Process
 from backend import MongoConnection
+import logging
+import logging.config
 from config import *
 
 
-def run():
+def run(logger):
     global flagcollection
     flagcollection = MongoConnection().db.flags
 
@@ -17,7 +19,7 @@ def run():
             flagcollection.update_many({"_id": {"$in": ids}}, {"$set": {'status': 'pending'}})
 
             # Submit
-            submit(flags)
+            submit(flags, logger)
 
             # Update submitted flags' status
             flagcollection.update_many({"_id": {"$in": ids}}, {"$set": {'status': 'submitted'}})
@@ -37,7 +39,7 @@ def retrieve():
     return ids, flags
 
 
-def submit(flags):
+def submit(flags, logger):
     if Config.Submission.protocol == Protocols.plaintext:
 
         connected = False
@@ -47,6 +49,7 @@ def submit(flags):
                 s.connect((Config.Submission.ip, Config.Submission.port))
                 connected = True
             except ConnectionRefusedError:
+                logger.error('Connection Refused')
                 continue
 
         for flag in flags:
@@ -70,10 +73,13 @@ def submit(flags):
 
 class Submitter:
     @staticmethod
-    def start():
+    def start(logger):
+        logger.info('Starting submitter')
         for _ in range(Config.Submission.n_workers):
-            Process(target=run).start()
+            Process(target=run, args=(logger,)).start()
 
 
 if __name__ == '__main__':
-    Submitter.start()
+    logging.config.fileConfig(fname='log.conf')
+    logger = logging.getLogger('submitter')
+    Submitter.start(logger)
