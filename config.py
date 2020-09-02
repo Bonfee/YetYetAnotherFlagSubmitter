@@ -37,34 +37,46 @@ class Config:
     class Flag:
         regex = r'CCIT{.*}'
 
+        # This class represent the status of flags in the database
+        # text -> The string that will be stored in the database and displayed in the frontend
+        # match -> The response of the gameserver when submitting the flag
+        class Status:
+            class Returned(Enum):  # Status returned from the gameserver
+                valid = {
+                    'text': 'Valid',
+                    'match': 'valid flag'
+                }
+                too_old = {
+                    'text': 'Too old',
+                    'match': 'too old flag'
+                }
+                already_submitted = {
+                    'text': 'Already submitted',
+                    'match': 'flag already submitted'
+                }
+                invalid = {
+                    'text': 'Invalid flag',
+                    'match': 'flag is invalid'
+                }
+
+            class Manual(Enum):
+                unknown = {
+                    'text': 'Unknown'  # If the server returns something we didn't expect
+                }
+                unsubmitted = {
+                    'text': 'Unsubmitted'
+                }
+                pending = {
+                    'text': 'Pending'
+                }
+
     class Submission:
         ip = "127.0.0.1"
         port = 1234
         protocol = Protocols.plaintext
         url = "http://%s:%d/" % (ip, port)
-        n_workers = 2
+        n_workers = 5
         flag_limit = 50
-
-        # This class represent the responses of the gameserver when submitting a flag
-        # text -> The string that will be stored in the database and displayed in the frontend
-        # match -> The response of the gameserver when submitting the flag
-        class Response(Enum):
-            valid = {
-                'text': 'Valid',
-                'match': 'valid flag'
-            }
-            too_old = {
-                'text': 'Too old',
-                'match': 'too old flag'
-            }
-            already_submitted = {
-                'text': 'Already submitted',
-                'match': 'flag already submitted'
-            }
-            invalid = {
-                'text': 'Invalid flag',
-                'match': 'flag is invalid'
-            }
 
     exploits_dir = str(pathlib.Path(__file__).parent.absolute()) + '/exploits'
     targets_file = str(pathlib.Path(__file__).parent.absolute()) + '/targets.txt'
