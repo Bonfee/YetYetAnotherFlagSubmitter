@@ -87,6 +87,13 @@ class Config:
         n_workers = 5
         flag_limit = 50
 
+        data = {
+            'data1': 'value1'
+        }  # POST request data
+        params = {
+            'param1': 'value1'
+        }  # POST and GET request params
+
     exploits_dir = str(pathlib.Path(__file__).parent.absolute()) + '/exploits'
     targets_file = str(pathlib.Path(__file__).parent.absolute()) + '/targets.txt'
     team_ip = '23.10.2.221'
