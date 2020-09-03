@@ -8,13 +8,13 @@ def get_targets(file_path=Config.targets_file):
     # Read ips from file
     with open(file_path, 'r') as f:
         targets = f.readlines()
+
+    # Remove blank lines
+    targets = [t.strip() for t in targets if t.strip() != '']
+
     # Remove our ip
     if Config.team_ip in targets:
         targets.remove(Config.team_ip)
-
-    # Remove blank lines
-    targets = [t for t in targets if t.strip() != '']
-
     return targets
 
 
