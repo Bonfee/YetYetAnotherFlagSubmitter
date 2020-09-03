@@ -6,3 +6,5 @@ CTF A/D Flag Submitter
 - [x] Decide what to do after an exploit ends
 - [x] Frontend
 - [ ] Finish implementing other submission methods such as HTTP (post, get)
+
+Wanna see how this flag submitter [works](./submitter.svg)?
