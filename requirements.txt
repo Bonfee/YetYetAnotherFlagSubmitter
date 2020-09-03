@@ -5,3 +5,5 @@ bottle
 pwntools
 mongo_datatables
 bjoern
+pytz
+texttable
