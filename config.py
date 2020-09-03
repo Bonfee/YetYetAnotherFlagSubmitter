@@ -1,4 +1,5 @@
-import pathlib
+import pathlib, pytz
+from datetime import datetime
 from enum import Enum
 
 
@@ -11,6 +12,13 @@ class Protocols:
 
 
 class Config:
+    class CTF:
+        tick = 120  # round length in seconds
+        start = pytz.timezone('Europe/Rome') \
+            .localize(datetime(year=2020, month=9, day=4, hour=10, minute=30)) \
+            .astimezone(pytz.timezone('UTC')) \
+            .timestamp()
+
     class Exploiter:
         PoolSize = 200
         timeout = 30

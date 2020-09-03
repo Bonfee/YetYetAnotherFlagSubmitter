@@ -1,5 +1,6 @@
 from config import *
-import os
+import os, time
+from datetime import datetime, timezone
 
 
 # Returns a list of ips removing our ip from the list
@@ -41,3 +42,20 @@ def get_flag_status(output):
         if r.value['match'] in output:
             return r.value['text']
     return 'Unknown'
+
+
+# Get the current round
+def get_round():
+    now = datetime.now(timezone.utc).timestamp()    # Current timestamp
+    start = Config.CTF.start    # CTF start timestamp
+    tick = Config.CTF.tick  # Round length
+    return int((now - start) / tick)
+
+
+# Sleep until next round
+def wait_until_next_round():
+    now = datetime.now(timezone.utc).timestamp()    # Current timestamp
+    start = Config.CTF.start  # CTF start timestamp
+    tick = Config.CTF.tick  # Round length
+    to_wait = tick - ((now - start) % tick)  # How much time till next round
+    time.sleep(to_wait)
