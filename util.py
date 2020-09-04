@@ -46,25 +46,26 @@ def get_flag_status(output):
 
 # Get the current round
 def get_round():
-    now = datetime.now(timezone.utc).timestamp()    # Current timestamp
-    start = Config.CTF.start    # CTF start timestamp
+    now = datetime.now(timezone.utc).timestamp()  # Current timestamp
+    start = Config.CTF.start  # CTF start timestamp
     tick = Config.CTF.tick  # Round length
     return int((now - start) / tick)
 
 
 # Sleep until next round
 def wait_until_next_round():
-    now = datetime.now(timezone.utc).timestamp()    # Current timestamp
+    now = datetime.now(timezone.utc).timestamp()  # Current timestamp
     start = Config.CTF.start  # CTF start timestamp
     tick = Config.CTF.tick  # Round length
     to_wait = tick - ((now - start) % tick)  # How much time till next round
     time.sleep(to_wait)
 
+
 # Edit http post data - replace value 'flag' with the real  flag
 def insert_flag(data, flag):
-	data_ = data.copy()
-	for key, value in data_.items():
-		if value == 'flag':
-			data_[key] = flag
-			return data_
-	return data_
+    data_ = data.copy()
+    for key, value in data_.items():
+        if value == 'flag':
+            data_[key] = flag
+            return data_
+    return data_
