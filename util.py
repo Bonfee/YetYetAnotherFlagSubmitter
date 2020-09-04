@@ -62,7 +62,7 @@ def wait_until_next_round():
 
 # Edit http post data - replace value 'flag' with the real  flag
 def insert_flag(data, flag):
-	data_ = data
+	data_ = data.copy()
 	for key, value in data_.items():
 		if value == 'flag':
 			data_[key] = flag
