@@ -3,7 +3,7 @@ from webservice import WebService
 from submitter import Submitter
 from frontend import Frontend
 import signal
-import logging
+import logging.config
 
 if __name__ == '__main__':
     logging.config.fileConfig(fname='log.conf')

@@ -67,17 +67,18 @@ def submit(flags, logger):
         s.close()
 
     elif Config.Submission.protocol == Protocols.Http.get:
-	for flag in flags:
-	        r = requests.get(Config.Submission.url, params=Config.Submission.params)
-	        output = r.text.strip()
-	        status.append(get_flag_status(output))
+        for flag in flags:
+            r = requests.get(Config.Submission.url, params=Config.Submission.params)
+            output = r.text.strip()
+            status.append(get_flag_status(output))
 
     elif Config.Submission.protocol == Protocols.Http.post:
-	for flag in flags:
-		data = insert_data(Config.Submission.data, flag) # Replace 'flag' value in Config.Submission.data with the real flag
-		r = requests.post(Config.Submission.url, params=Config.Submission.params, data=data)
-	        output = r.text.strip()
-	        status.append(get_flag_status(output))
+        for flag in flags:
+            data = insert_flag(Config.Submission.data,
+                               flag)  # Replace 'flag' value in Config.Submission.data with the real flag
+            r = requests.post(Config.Submission.url, params=Config.Submission.params, data=data)
+            output = r.text.strip()
+            status.append(get_flag_status(output))
 
     else:
         pass
