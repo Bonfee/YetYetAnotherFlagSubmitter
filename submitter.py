@@ -6,7 +6,7 @@ from backend import MongoConnection
 import logging
 import logging.config
 from config import *
-from util import get_flag_status
+from util import get_flag_status, insert_flag
 
 
 def run(logger):
@@ -73,13 +73,8 @@ def submit(flags, logger):
 	        status.append(get_flag_status(output))
 
     elif Config.Submission.protocol == Protocols.Http.post:
-
-	data = Config.Submission.data # Replace 'flag' value in Config.Submission.data with the real flag
 	for flag in flags:
-		for key, value in data:
-			if value == 'flag':
-				data[key] = flag
-
+		data = insert_data(Config.Submission.data, flag) # Replace 'flag' value in Config.Submission.data with the real flag
 		r = requests.post(Config.Submission.url, params=Config.Submission.params, data=data)
 	        output = r.text.strip()
 	        status.append(get_flag_status(output))

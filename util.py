@@ -59,3 +59,12 @@ def wait_until_next_round():
     tick = Config.CTF.tick  # Round length
     to_wait = tick - ((now - start) % tick)  # How much time till next round
     time.sleep(to_wait)
+
+# Edit http post data - replace value 'flag' with the real  flag
+def insert_flag(data, flag):
+	data_ = data
+	for key, value in data_.items():
+		if value == 'flag':
+			data_[key] = flag
+			return data_
+	return data_
