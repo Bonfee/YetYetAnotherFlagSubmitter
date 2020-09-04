@@ -1,16 +1,17 @@
-import logging
 import logging.config
 import re
 from multiprocessing import Process
+
 import bottle
 from bson.json_util import dumps
+
 from backend import MongoConnection
 from config import Config
 
 
 @bottle.get('/data')
 def get_data():
-    data = flagcollection.find()
+    data = MongoConnection().db.flags.find()
     return dumps(data)
 
 
@@ -30,9 +31,10 @@ def submit_many():
             return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
 
     if len(valid_flags) > 0:
-        flagcollection.insert_many([{'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
-                                     'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
-                                    for flag in valid_flags])
+        MongoConnection().db.flags.insert_many(
+            [{'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
+              'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
+             for flag in valid_flags])
 
 
 @bottle.post('/submit')
@@ -44,17 +46,15 @@ def submit():
 
     # Decide whether to send the matched string or the original flag
     if re.match(Config.Flag.regex, flag):
-        flagcollection.insert_one({'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
-                                   'status': Config.Flag.Status.Manual.unsubmitted.value['text']})
+        MongoConnection().db.flags.insert_one(
+            {'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
+             'status': Config.Flag.Status.Manual.unsubmitted.value['text']})
     else:
         print('Regex fail')  # TO DO
         return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
 
 
 def run():
-    global flagcollection
-    flagcollection = MongoConnection().db.flags
-
     bottle.run(host=Config.Backend.WebService.ip, port=Config.Backend.WebService.port, server='bjoern', quiet=True)
 
 

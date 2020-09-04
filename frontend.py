@@ -41,10 +41,11 @@ def api_db(collection):
 # Pie Chart Ajax
 @bottle.route('/dispatching_ajax')
 def get_stats():
-    failed = flagcollection.find({'status': 'failed'}).count()
-    submitted = flagcollection.find({'status': 'submitted'}).count()
-    unsubmitted = flagcollection.find({'status': 'unsubmitted'}).count()
-    pending = flagcollection.find({'status': 'pending'}).count()
+    mongo = MongoConnection()
+    failed = mongo.db.flags.find({'status': 'failed'}).count()
+    submitted = mongo.db.flags.find({'status': 'submitted'}).count()
+    unsubmitted = mongo.db.flags.find({'status': 'unsubmitted'}).count()
+    pending = mongo.db.flags.find({'status': 'pending'}).count()
     return json.dumps({'failed': failed, 'submitted': submitted, 'pending': pending, 'unsubmitted': unsubmitted})
 
 
@@ -55,7 +56,7 @@ def get_stats():
     labels = []
     count = []
     for exploit in exploits:
-        flagno = flagcollection.find({'exploit': exploit}).count()
+        flagno = MongoConnection().db.flags.find({'exploit': exploit}).count()
         count.append(flagno)
         exploit_name = exploit.split('/')
         exploit_name = exploit_name[-1]
@@ -64,9 +65,6 @@ def get_stats():
 
 
 def run():
-    global flagcollection
-    flagcollection = MongoConnection().db.flags
-
     bottle.run(host=Config.Frontend.ip, port=Config.Frontend.port, server='bjoern', quiet=True)
 
 

@@ -10,22 +10,19 @@ from util import get_flag_status, insert_flag
 
 
 def run(logger):
-    global flagcollection
-    flagcollection = MongoConnection().db.flags
-
     while True:
         ids, flags = retrieve()
         if len(ids) > 0:
             # Update retrieved flags' status
-            flagcollection.update_many({"_id": {"$in": ids}},
-                                       {"$set": {'status': Config.Flag.Status.Manual.pending.value['text']}})
+            MongoConnection().db.flags.update_many({"_id": {"$in": ids}},
+                                                   {"$set": {'status': Config.Flag.Status.Manual.pending.value['text']}})
 
             # Submit
             status = submit(flags, logger)
 
             # Update submitted flags' status
             for i in range(0, len(ids)):
-                flagcollection.update_one({"_id": ids[i]}, {"$set": {'status': status[i]}})
+                MongoConnection().db.flags.update_one({"_id": ids[i]}, {"$set": {'status': status[i]}})
 
         time.sleep(1)
 
@@ -35,8 +32,8 @@ def retrieve():
 
     # Get all the unsubmitted flags,
     # if we want to have many submitter workers we can tweak the number of flags retrieved
-    for e in flagcollection.find({'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
-                                 ).limit(Config.Submission.flag_limit):
+    for e in MongoConnection().db.flags.find({'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
+                                             ).limit(Config.Submission.flag_limit):
         ids.append(e['_id'])
         flags.append(str(e['flag']))
 
