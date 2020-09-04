@@ -88,8 +88,8 @@ class Config:
         flag_limit = 50
 
         data = {
-            'data1': 'value1'
-        }  # POST request data
+            'flag': 'flag'
+        }  # POST request data, the value 'flag' (not the key) is a placeholder and will be replaced by the real flag
         params = {
             'param1': 'value1'
         }  # POST and GET request params
