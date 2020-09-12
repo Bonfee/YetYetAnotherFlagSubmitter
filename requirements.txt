@@ -7,3 +7,4 @@ mongo_datatables
 bjoern
 pytz
 texttable
+pipreqs

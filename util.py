@@ -1,5 +1,5 @@
 from config import *
-import os, time
+import os, time, subprocess
 from datetime import datetime, timezone
 
 
@@ -69,3 +69,12 @@ def insert_flag(data, flag):
             data_[key] = flag
             return data_
     return data_
+
+
+# Installs exploits' deps
+def install_exploits_deps():
+    # Generate exploits/requirements.txt
+    subprocess.run(['pipreqs', 'exploits/', '--force', '--no-pin'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    # Install requirements
+    subprocess.run(['pip3', 'install', '-r', 'exploits/requirements.txt', '--user'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
