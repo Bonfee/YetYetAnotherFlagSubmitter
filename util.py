@@ -74,7 +74,7 @@ def insert_flag(data, flag):
 # Installs exploits' deps
 def install_exploits_deps():
     # Generate exploits/requirements.txt
-    subprocess.run(['pipreqs', 'exploits/', '--force', '--no-pin'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(['pipreqs', 'exploits/', '--force', '--no-pin', '--savepath', 'requirements-exploits.txt'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     # Install requirements
-    subprocess.run(['pip3', 'install', '-r', 'exploits/requirements.txt', '--user'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(['pip3', 'install', '-r', 'requirements-exploits.txt', '--user'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
