@@ -29,7 +29,7 @@ class Config:
 
     class Backend:
         class Mongo:
-            ip = '127.0.0.1'
+            ip = 'mongo'
             port = 27017
 
         class WebService:
