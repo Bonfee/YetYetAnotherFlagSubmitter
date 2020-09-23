@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+
+  mongo:
+    image: mongo:4
+    networks:
+      - acheronet
+    restart: always
+
+  caronte:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flagsubmitter
+    ports:
+      - "8000:8000"
+      - "8080:8080"
+    depends_on:
+      - mongo
+    networks:
+      - acheronet
+    command: python3 main.py
+
+networks:
+  acheronet:
