@@ -48,6 +48,6 @@ The max value should be `number_of_exploits * number_of_targets`.
 - `n_workers` How many processes that submit flags.
 - `flag_limit` How many flags are retrieved from the database before being submitted.
 
-`exploits_dir` The absolute path to the directory containing the exploits.
-`targets_file` The absolute path to the plaintext file containing the list of targets (IP).
-`team_ip` Our vulnbox ip, so we don't exploit ourselves.
+`exploits_dir` The absolute path to the directory containing the exploits.  
+`targets_file` The absolute path to the plaintext file containing the list of targets (IP).  
+`team_ip` Our vulnbox ip, so we don't exploit ourselves.  
