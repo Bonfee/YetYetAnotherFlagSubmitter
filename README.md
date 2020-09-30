@@ -11,7 +11,7 @@ This tool was written for the CyberChallenge 2020 A/D CTF final by the team of t
 
 ---
 
-### Configuration
+### Configuration (`config.py`)
 
 #### `class CTF:`
 - `tick` A round lenght in seconds
