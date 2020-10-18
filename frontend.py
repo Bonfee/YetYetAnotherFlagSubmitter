@@ -42,11 +42,17 @@ def api_db(collection):
 @bottle.route('/dispatching_ajax')
 def get_stats():
     mongo = MongoConnection()
-    failed = mongo.db.flags.find({'status': 'failed'}).count()
-    submitted = mongo.db.flags.find({'status': 'submitted'}).count()
-    unsubmitted = mongo.db.flags.find({'status': 'unsubmitted'}).count()
-    pending = mongo.db.flags.find({'status': 'pending'}).count()
-    return json.dumps({'failed': failed, 'submitted': submitted, 'pending': pending, 'unsubmitted': unsubmitted})
+    data = {}
+
+    for st in Config.Flag.Status.Manual:
+        flag_status = st.value['text']
+        data[flag_status] = mongo.db.flags.find({'status': flag_status}).count()
+
+    for st in Config.Flag.Status.Returned:
+        flag_status = st.value['text']
+        data[flag_status] = mongo.db.flags.find({'status': flag_status}).count()
+
+    return json.dumps(data)
 
 
 # Bar Chart Ajax
