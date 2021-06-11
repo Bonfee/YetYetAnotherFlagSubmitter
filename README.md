@@ -44,6 +44,7 @@ The max value should be `number_of_exploits * number_of_targets`.
 - `ip` The ip of the Submission server.
 - `port` The port of the Submission server.
 - `protocol` The submission protocol used. ( HTTP / Plaintext )
+- `use_ipv6` Set to true if the flags submission is done over IPv6 ( The `ip` must be / resolve to a valid IPv6 address ).
 - `url` The Submission URL (if HTTP is used).
 - `n_workers` How many processes that submit flags.
 - `flag_limit` How many flags are retrieved from the database before being submitted.
