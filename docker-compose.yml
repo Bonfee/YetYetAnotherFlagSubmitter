@@ -7,11 +7,10 @@ services:
       - acheronet
     restart: always
 
-  caronte:
+  flagsubmitter:
     build:
       context: .
       dockerfile: Dockerfile
-    image: flagsubmitter
     ports:
       - "8000:8000"
       - "8080:8080"
