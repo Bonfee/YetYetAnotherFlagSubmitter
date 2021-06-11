@@ -83,6 +83,7 @@ class Config:
         ip = "127.0.0.1"
         port = 1234
         protocol = Protocols.plaintext
+        use_ipv6 = False
         url = "http://%s:%d/" % (ip, port)
         n_workers = 5
         flag_limit = 50

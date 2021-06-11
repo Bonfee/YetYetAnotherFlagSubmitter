@@ -47,7 +47,13 @@ def submit(flags, logger):
 
         connected = False
         while not connected:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            if(Config.Submission.use_ipv6):
+                addrfamily = socket.AF_INET6
+            else:
+                addrfamily = socket.AF_INET
+
+            s = socket.socket(addrfamily, socket.SOCK_STREAM)
+
             try:
                 s.connect((Config.Submission.ip, Config.Submission.port))
                 connected = True
