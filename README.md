@@ -5,6 +5,23 @@ This is yet yet another flag submitter, written in Python.
 This tool was written for the CyberChallenge 2020 A/D CTF final by the team of the University of Bologna.
 
 ---
+## Running
+### Docker
+```sh
+cd YetYetAnotherFlagSubmitter/
+docker-compose build
+docker-compose run flagsubmitter
+```
+### Without Docker
+First setup a MongoDB instance and update the ip and port in the config file.
+```sh
+cd YetYetAnotherFlagSubmitter/
+sudo apt-get install python3 python3-pip libev-dev libevdev2
+python3 -m pip install -U pip
+pip3 install -r requirements.txt
+python3 main.py
+```
+---
 
 ### How does it work?
 [Working](./submitter.svg)
