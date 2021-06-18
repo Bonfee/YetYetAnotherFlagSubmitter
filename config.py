@@ -82,6 +82,7 @@ class Config:
     class Submission:
         ip = "127.0.0.1"
         port = 1234
+        use_raw_http_request = True
         protocol = Protocols.plaintext
         use_ipv6 = False
         url = "http://%s:%d/" % (ip, port)

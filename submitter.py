@@ -1,4 +1,4 @@
-import requests
+import requests, requests_raw
 import socket
 import time
 from multiprocessing import Process
@@ -7,6 +7,7 @@ import logging
 import logging.config
 from config import *
 from util import get_flag_status, insert_flag
+from raw_http_template   import raw_template
 
 
 def run(logger):
@@ -42,8 +43,14 @@ def retrieve():
 
 def submit(flags, logger):
     status = []
+    if Config.Submission.use_raw_http_request:
+        for flag in flags:
+            raw_req = raw_template.replace("FLAG_PLACEHOLDER", flag)
+            r = requests_raw.raw(url=Config.Submission.url, data=raw_req)
+            output = r.text.strip()
+            status.append(get_flag_status(output))
 
-    if Config.Submission.protocol == Protocols.plaintext:
+    elif Config.Submission.protocol == Protocols.plaintext:
 
         connected = False
         while not connected:
