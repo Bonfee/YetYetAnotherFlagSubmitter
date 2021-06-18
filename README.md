@@ -60,7 +60,7 @@ The max value should be `number_of_exploits * number_of_targets`.
 #### `class Submission:`
 - `ip` The ip of the Submission server.
 - `port` The port of the Submission server.
-- `use_raw_http_request` If set to true flags will be submitted over http using the http request from `raw_http_template.py`. This flag overrides the others ( ip, port, protocol, url, use_ipv6 ).
+- `use_raw_http_request` If set to true flags will be submitted over http using the http request from `raw_http_template.py`. `url` must be set correctly.
 - `protocol` The submission protocol used. ( HTTP / Plaintext )
 - `use_ipv6` Set to true if the flags submission is done over IPv6 ( The `ip` must be / resolve to a valid IPv6 address ).
 - `url` The Submission URL (if HTTP is used).
