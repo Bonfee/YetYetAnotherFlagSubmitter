@@ -8,3 +8,4 @@ bjoern
 pytz
 texttable
 pipreqs
+requests-raw

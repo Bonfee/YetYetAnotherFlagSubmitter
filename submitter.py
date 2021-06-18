@@ -7,7 +7,7 @@ import logging
 import logging.config
 from config import *
 from util import get_flag_status, insert_flag
-from raw_http_template   import raw_template
+from raw_http_template import raw_template
 
 
 def run(logger):
