@@ -1,4 +1,5 @@
 import logging.config
+import os
 import re
 from multiprocessing import Process
 
@@ -11,7 +12,7 @@ from redis_queue import RedisConnection
 @bottle.post('/submit_many')
 def submit_many():
     flags = bottle.request.json.get('flags')
-    exploit = bottle.request.json.get('exploit')
+    exploit = os.path.basename(bottle.request.json.get('exploit'))
     timestamp = bottle.request.forms.get('timestamp')
     target = bottle.request.json.get('target')
 
@@ -31,7 +32,7 @@ def submit_many():
 @bottle.post('/submit')
 def submit():
     flag = bottle.request.forms.get('flag')
-    exploit = bottle.request.forms.get('exploit')
+    exploit = os.path.basename(bottle.request.forms.get('exploit'))
     timestamp = bottle.request.forms.get('timestamp')
     target = bottle.request.forms.get('target')
 
