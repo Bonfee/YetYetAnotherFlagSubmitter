@@ -5,7 +5,7 @@ from multiprocessing import Process
 import bottle
 
 from config import Config
-from queue import RedisConnection
+from redis_queue import RedisConnection
 
 
 @bottle.post('/submit_many')
