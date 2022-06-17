@@ -24,9 +24,8 @@ def submit_many():
             print('Regex fail')  # TO DO
             return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
 
-    if len(valid_flags) > 0:
-        for flag in valid_flags:
-            RedisConnection().red.lpush(Config.Redis.channel, f"{flag}|{exploit}|1|{target}")
+    for flag in valid_flags:
+        RedisConnection().red.lpush(Config.Redis.channel, f"{flag}|{exploit}|1|{target}")
 
 
 @bottle.post('/submit')
