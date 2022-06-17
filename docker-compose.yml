@@ -1,26 +1,8 @@
 version: "3.7"
 services:
 
-  mongo:
-    image: mongo:4
-    expose:
-      - "27017"
-    networks:
-      - acheronet
-    restart: always
-
   flagsubmitter:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "127.0.0.1:8000:8000"
-      - "127.0.0.1:8080:8080"
-    depends_on:
-      - mongo
-    networks:
-      - acheronet
     command: python3 main.py
-
-networks:
-  acheronet:

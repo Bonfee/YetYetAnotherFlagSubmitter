@@ -3,16 +3,9 @@ import re
 from multiprocessing import Process
 
 import bottle
-from bson.json_util import dumps
 
-from backend import MongoConnection
 from config import Config
-
-
-@bottle.get('/data')
-def get_data():
-    data = MongoConnection().db.flags.find()
-    return dumps(data)
+from queue import RedisConnection
 
 
 @bottle.post('/submit_many')
@@ -31,10 +24,8 @@ def submit_many():
             return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
 
     if len(valid_flags) > 0:
-        MongoConnection().db.flags.insert_many(
-            [{'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
-              'status': Config.Flag.Status.Manual.unsubmitted.value['text']}
-             for flag in valid_flags])
+        for flag in valid_flags:
+            RedisConnection().red.publish(Config.Redis.channel, f"{flag}|{exploit}|1|{target}")
 
 
 @bottle.post('/submit')
@@ -46,9 +37,7 @@ def submit():
 
     # Decide whether to send the matched string or the original flag
     if re.match(Config.Flag.regex, flag):
-        MongoConnection().db.flags.insert_one(
-            {'flag': flag, 'exploit': exploit, 'target': target, 'timestamp': timestamp,
-             'status': Config.Flag.Status.Manual.unsubmitted.value['text']})
+        RedisConnection().red.publish(Config.Redis.channel, f"{flag}|{exploit}|1|{target}")
     else:
         print('Regex fail')  # TO DO
         return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
