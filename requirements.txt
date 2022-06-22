@@ -1,12 +1,8 @@
-pymongo
 requests~=2.25.1
 pexpect~=4.8.0
 bottle~=0.12.21
 pwntools
-mongo_datatables
 bjoern
 pytz~=2021.1
-texttable
 pipreqs
-requests-raw
 redis
