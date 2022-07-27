@@ -1,3 +1,4 @@
+import json
 import logging.config
 import os
 import re
@@ -25,7 +26,13 @@ def submit_many():
             return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
 
     for flag in valid_flags:
-        RedisConnection().red.lpush(Config.Redis.channel, f"{flag}|{exploit}|1|{target}")
+        RedisConnection().red.lpush(Config.Redis.channel, json.dumps({
+            "flag": flag,
+            "name": exploit,
+            "version": "1",
+            "host": target,
+            "ttl": 0
+        }))
 
 
 @bottle.post('/submit')
@@ -37,7 +44,13 @@ def submit():
 
     # Decide whether to send the matched string or the original flag
     if re.match(Config.Flag.regex, flag):
-        RedisConnection().red.lpush(Config.Redis.channel, f"{flag}|{exploit}|1|{target}")
+        RedisConnection().red.lpush(Config.Redis.channel, json.dumps({
+            "flag": flag,
+            "name": exploit,
+            "version": "1",
+            "host": target,
+            "ttl": 0
+        }))
     else:
         print('Regex fail')  # TO DO
         return bottle.HTTPResponse({'error': 'Flag was not correct'}, 400)
